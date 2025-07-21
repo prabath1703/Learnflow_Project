@@ -1,6 +1,10 @@
 import random
 from datetime import datetime, timedelta
 
+print("📦 smart_scheduler.py loaded")
+# ... same for others
+
+
 def generate_study_plan(subjects, total_hours):
     plan = {}
     hours_per_subject = total_hours // len(subjects)

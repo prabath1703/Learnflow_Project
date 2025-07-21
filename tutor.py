@@ -2,6 +2,9 @@ import openai
 import os
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
+print("📦 smart_scheduler.py loaded")
+# ... same for others
+
 
 def ask_learnflow(question):
     response = openai.ChatCompletion.create(

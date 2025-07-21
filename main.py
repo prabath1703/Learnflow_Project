@@ -1,3 +1,5 @@
+import openai
+import os 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from models import User, StudyRequest, AskQuery, SmartScheduleRequest
@@ -5,6 +7,14 @@ from planner import generate_study_plan
 from tutor import ask_learnflow
 from progress import save_progress, get_progress
 from smart_scheduler import generate_smart_schedule
+
+print("✅ LearnFlow backend is starting...")
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+print(f"🔑 OpenAI key found: {bool(openai.api_key)}")
+
+# rest of your imports...
+
 
 app = FastAPI(title="LearnFlow API")
 

@@ -1,5 +1,9 @@
 from datetime import datetime, timedelta
 
+print("📦 smart_scheduler.py loaded")
+# ... same for others
+
+
 def generate_smart_schedule(wake_time: str, sleep_time: str, classes: list, topics: list, study_hours: int, breaks: int):
     """
     Generate a smart daily schedule that avoids class times and inserts study + break blocks.
