@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 /// ✅ Correct URL of your backend
-const String baseUrl = 'http://192.168.1.8:10000';
+const String baseUrl = 'https://learnflow-backend-n1js.onrender.com';
 
 class ScheduleApi {
   static Future<Map<String, dynamic>?> generateSchedule(Map<String, dynamic> inputData) async {

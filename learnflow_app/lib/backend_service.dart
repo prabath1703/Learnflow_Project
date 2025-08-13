@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 // Updated with your local IP
-const String baseUrl = 'http://192.168.1.8:10000';
+const String baseUrl = 'https://learnflow-backend-n1js.onrender.com';
 
 class BackendService {
   /// Sends user prompt to the AI model and gets the generated schedule.

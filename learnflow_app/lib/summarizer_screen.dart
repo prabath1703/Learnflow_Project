@@ -16,7 +16,7 @@ class _SummarizerScreenState extends State<SummarizerScreen> {
   String? _quiz;
   bool _isLoading = false;
 
-  final String baseUrl = 'http://192.168.1.8:10000';
+  final String baseUrl = 'https://learnflow-backend-n1js.onrender.com';
 
   Future<void> _summarizeYouTube() async {
     if (_youtubeController.text.isEmpty) {
