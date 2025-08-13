@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List
+from typing import Optional
 
 # For /register
 class User(BaseModel):
@@ -10,6 +11,9 @@ class User(BaseModel):
 class StudyRequest(BaseModel):
     subjects: List[str]
     hours: int
+    
+class PromptRequest(BaseModel):
+    prompt: str
 
 # For /ask
 class AskQuery(BaseModel):
@@ -29,3 +33,7 @@ class SmartScheduleRequest(BaseModel):
     topics: List[str]
     study_hours: int
     breaks: int
+    preferred_time: Optional[str] = None
+
+class VisionaryScheduleRequest(BaseModel):
+    prompt: str

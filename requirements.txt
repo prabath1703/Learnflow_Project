@@ -4,3 +4,7 @@ pydantic
 httpx
 jinja2
 openai
+pytesseract
+pillow
+PyMuPDF
+arxiv

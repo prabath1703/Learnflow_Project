@@ -4,10 +4,10 @@ import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
-import 'topic_selector.dart';
-import 'smart_schedule_input.dart';
-import 'smart_schedule_result.dart';
-import 'learning_page.dart';
+import 'visionary_schedule_input.dart';
+import 'visionary_schedule_result.dart';
+import 'visionary_landing_page.dart';
+import 'summarizer_screen.dart'; // ✅ Added import
 
 void main() {
   runApp(const LearnFlowApp());
@@ -22,44 +22,24 @@ class LearnFlowApp extends StatelessWidget {
       title: 'LearnFlow',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.black,
-        textTheme: GoogleFonts.poppinsTextTheme(),
+        primarySwatch: Colors.deepPurple,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: '/',
       routes: {
         '/': (context) => const LearnFlowHomePage(),
-        '/topics': (context) => const TopicSelectorPage(),
-      
-      },
-      onGenerateRoute: (settings) {
-        if (settings.name == '/schedule_result') {
-          final args = settings.arguments as Map<String, dynamic>;
-          return MaterialPageRoute(
-            builder: (context) =>
-                SmartScheduleResultPage(schedule: args['schedule']),
-          );
-        }
-
-        if (settings.name == '/learning') {
-          final args = settings.arguments as Map<String, dynamic>;
-          return MaterialPageRoute(
-            builder: (context) => LearningPage(
-              topic: args['topic'],
-              plan: args['plan'],
-            ),
-          );
-        }
-
-        return null;
+        '/visionary-landing': (context) => const FeatureSelectionPage(),
+        '/visionary-input': (context) => const VisionaryScheduleInputPage(),
+        '/visionary-result': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as String;
+          return VisionaryScheduleResultPage(schedule: args);
+        },
+        '/summarizer': (context) =>  SummarizerScreen(), // ✅ Added route
       },
     );
   }
 }
 
-// KEEPING THE REST OF YOUR CODE AS-IS BELOW...
-
-
-// The rest of your LearnFlowHomePage and particle animation code stays unchanged:
 class LearnFlowHomePage extends StatefulWidget {
   const LearnFlowHomePage({super.key});
 
@@ -232,7 +212,7 @@ class _LearnFlowHomePageState extends State<LearnFlowHomePage>
           delay: const Duration(milliseconds: 600),
           child: ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/topics');
+              Navigator.pushNamed(context, '/visionary-landing');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.cyan,

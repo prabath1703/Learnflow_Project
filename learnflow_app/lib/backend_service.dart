@@ -1,42 +1,28 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-/// For Android emulator or Chrome web builds, use 10.0.2.2 to connect to host machine.
-final String _backendUrl = "https://learnflow-backend-n1js.onrender.com";
-
-
+// Updated with your local IP
+const String baseUrl = 'http://192.168.1.8:10000';
 
 class BackendService {
-  /// Sends study plan request to the FastAPI backend
-  static Future<Map<String, dynamic>> generatePlan(
-    List<String> topicsList, {
-    required String username,
-    int hours = 2,
-  }) async {
-    final url = Uri.parse("$_backendUrl/smart-schedule");
-     // ✅ Correct
-    final headers = {"Content-Type": "application/json"};
-
-    final body = jsonEncode({
-      "username": username,
-      "subjects": topicsList,
-      "hours": hours,
-    });
-
+  /// Sends user prompt to the AI model and gets the generated schedule.
+  static Future<String> generateVisionarySchedule(String prompt) async {
+    final url = Uri.parse('$baseUrl/generate-visionary-schedule');
     try {
-      print("📡 Sending plan request to backend...");
-      final response = await http.post(url, headers: headers, body: body);
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'prompt': prompt}),
+      );
 
       if (response.statusCode == 200) {
-        print("✅ Plan generation successful");
-        return jsonDecode(response.body);
+        final data = jsonDecode(response.body);
+        return data['generated_schedule']; // Return beautified string
       } else {
-        print("❌ Server Error [${response.statusCode}]: ${response.body}");
-        throw Exception("Failed to generate plan");
+        throw Exception('Failed to generate schedule.');
       }
     } catch (e) {
-      print("⚠️ Exception caught: $e");
-      throw Exception("Connection error: $e");
+      throw Exception('Failed to generate schedule.');
     }
   }
 }

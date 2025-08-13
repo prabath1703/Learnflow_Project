@@ -13,8 +13,8 @@ class LearningPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ Extract the actual daily plan from the backend response
-    final Map<String, dynamic> dailyPlan = plan['plan'];
+    // ✅ Extract and validate the daily plan
+    final Map<String, dynamic> dailyPlan = plan['plan'] ?? {};
     final dayKeys = dailyPlan.keys.toList();
 
     return Scaffold(
@@ -26,46 +26,57 @@ class LearningPage extends StatelessWidget {
           style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: dayKeys.length,
-          itemBuilder: (context, index) {
-            final day = dayKeys[index];
-            final rawItems = dailyPlan[day];
-            final items = rawItems is List ? List<String>.from(rawItems) : [rawItems.toString()];
-
-            return Card(
-              color: Colors.grey.shade900,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              margin: const EdgeInsets.only(bottom: 12),
-              child: ExpansionTile(
-                collapsedIconColor: Colors.white70,
-                iconColor: Colors.cyan,
-                title: Text(
-                  day,
-                  style: GoogleFonts.poppins(
-                    fontSize: 20,
-                    color: Colors.cyanAccent,
-                    fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: dayKeys.isEmpty
+              ? Center(
+                  child: Text(
+                    "No plan available yet 📭",
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
                   ),
-                ),
-                children: items
-                    .map(
-                      (lesson) => ListTile(
-                        leading: const Icon(Icons.check_circle, color: Colors.greenAccent),
-                        title: Text(
-                          lesson,
-                          style: const TextStyle(color: Colors.white70),
-                        ),
+                )
+              : ListView.builder(
+                  itemCount: dayKeys.length,
+                  itemBuilder: (context, index) {
+                    final day = dayKeys[index];
+                    final rawItems = dailyPlan[day];
+                    final items = rawItems is List
+                        ? List<String>.from(rawItems)
+                        : [rawItems.toString()];
+
+                    return Card(
+                      color: Colors.grey.shade900,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                    )
-                    .toList(),
-              ),
-            );
-          },
+                      margin: const EdgeInsets.only(bottom: 12),
+                      child: ExpansionTile(
+                        collapsedIconColor: Colors.white70,
+                        iconColor: Colors.cyan,
+                        title: Text(
+                          day,
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            color: Colors.cyanAccent,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        children: items
+                            .map(
+                              (lesson) => ListTile(
+                                leading: const Icon(Icons.check_circle, color: Colors.greenAccent),
+                                title: Text(
+                                  lesson,
+                                  style: const TextStyle(color: Colors.white70),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    );
+                  },
+                ),
         ),
       ),
     );
