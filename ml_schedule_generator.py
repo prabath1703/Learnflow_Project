@@ -1,6 +1,5 @@
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 import torch
-import os
 import logging
 import re
 from datetime import datetime
@@ -8,80 +7,47 @@ from datetime import datetime
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-model_path = os.path.join("ml_models", "visionary_schedule_model")
+# Hugging Face model repo
+model_name = "PrabathDamarla/visionary_schedule_model"
 
 try:
-    tokenizer = T5Tokenizer.from_pretrained(model_path)
-    model = T5ForConditionalGeneration.from_pretrained(model_path)
+    logger.info(f"⏳ Loading visionary model from Hugging Face: {model_name}")
+    tokenizer = T5Tokenizer.from_pretrained(model_name)
+    model = T5ForConditionalGeneration.from_pretrained(model_name)
     model_loaded = True
-    logger.info("✅ Visionary model loaded successfully.")
+    logger.info("✅ Visionary model loaded successfully from Hugging Face.")
 except Exception as e:
-    logger.error(f"❌ Failed to load T5 model: {e}")
+    logger.error(f"❌ Failed to load T5 model from Hugging Face: {e}")
     model_loaded = False
 
 
 def beautify_schedule(raw_output):
     today = datetime.now()
-    formatted_date = today.strftime("%B %d")  # Example: August 08
+    formatted_date = today.strftime("%B %d")  # Example: August 13
 
-    # Remove the leading label if it exists
     raw_output = raw_output.replace("Visionary Schedule", "").strip()
 
-    # Extract time-task pairs
     blocks = re.findall(
         r"(\d{2}:\d{2}–\d{2}:\d{2})\s*–\s*(.*?)(?=(?:\d{2}:\d{2}–\d{2}:\d{2})|$)",
         raw_output
     )
 
-    # Emoji map (EXTENDED)
     emoji_map = {
-        "Morning Routine": "☀️",
-        "Physics": "⚛️",
-        "Science": "🔬",
-        "Chemistry": "🧪",
-        "Biology": "🧬",
-        "Math": "📐",
-        "Breakfast": "🍽️",
-        "Lunch": "🥗",
-        "Dinner": "🍽️",
-        "Snacks": "🍪",
-        "Nap": "🛏️",
-        "Sleep": "😴",
-        "Sleep Prep": "😴",
-        "Break": "☕",
-        "Tea Break": "🍵",
-        "Relax": "🧘",
-        "Meditation": "🧘‍♂️",
-        "Exercise": "🏋️‍♀️",
-        "Light Walk": "🚶",
-        "Walk": "🚶‍♂️",
-        "Mock Test": "📝",
-        "Doubt Solving": "❓",
-        "Revision": "🔁",
-        "Final Review": "✅",
-        "Reading": "📖",
-        "Journaling": "📓",
-        "Mindfulness": "🧠",
-        "YouTube": "📺",
-        "Instagram": "📸",
-        "Pomodoro": "🍅",
-        "Productivity": "💡",
-        "Focus": "🎯",
-        "Call": "📞",
-        "Meeting": "📅"
+        "Morning Routine": "☀️", "Physics": "⚛️", "Science": "🔬", "Chemistry": "🧪",
+        "Biology": "🧬", "Math": "📐", "Breakfast": "🍽️", "Lunch": "🥗", "Dinner": "🍽️",
+        "Snacks": "🍪", "Nap": "🛏️", "Sleep": "😴", "Sleep Prep": "😴", "Break": "☕",
+        "Tea Break": "🍵", "Relax": "🧘", "Meditation": "🧘‍♂️", "Exercise": "🏋️‍♀️",
+        "Light Walk": "🚶", "Walk": "🚶‍♂️", "Mock Test": "📝", "Doubt Solving": "❓",
+        "Revision": "🔁", "Final Review": "✅", "Reading": "📖", "Journaling": "📓",
+        "Mindfulness": "🧠", "YouTube": "📺", "Instagram": "📸", "Pomodoro": "🍅",
+        "Productivity": "💡", "Focus": "🎯", "Call": "📞", "Meeting": "📅"
     }
 
-    # Clock emojis for time blocks
     clock_emojis = ["🕖", "🕗", "🕘", "🕙", "🕚", "🕛", "🕐", "🕑", "🕒", "🕓", "🕔", "🕕"]
 
-    # Add date to the top header
     formatted = [f"📅 {formatted_date} — Visionary Schedule"]
     for i, (time, task) in enumerate(blocks):
-        emoji = ""
-        for key in emoji_map:
-            if key.lower() in task.lower():
-                emoji = emoji_map[key]
-                break
+        emoji = next((emoji_map[key] for key in emoji_map if key.lower() in task.lower()), "")
         clock = clock_emojis[i % len(clock_emojis)]
         formatted.append(f"{clock} {time} – {task.strip()} {emoji}")
 
