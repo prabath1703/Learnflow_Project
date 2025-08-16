@@ -10,3 +10,5 @@ PyMuPDF
 arxiv
 python-dotenv
 youtube-transcript-api
+transformers
+torch
