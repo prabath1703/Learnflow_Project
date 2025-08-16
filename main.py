@@ -4,7 +4,7 @@ import re
 import os
 import io
 import openai
-import PyPDF2
+import fitz
 from fastapi import FastAPI, HTTPException, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from youtube_transcript_api import YouTubeTranscriptApi
