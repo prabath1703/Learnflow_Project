@@ -13,3 +13,4 @@ youtube-transcript-api
 transformers
 torch
 sentencepiece
+python-multipart
