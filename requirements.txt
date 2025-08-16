@@ -9,3 +9,4 @@ pillow
 PyMuPDF
 arxiv
 python-dotenv
+youtube-transcript-api
